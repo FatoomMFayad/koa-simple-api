@@ -63,6 +63,16 @@ router.delete("/posts/:id", async (ctx, next) => {
   console.log(posts);
   return await next();
 });
+
+//update a post by id
+
+router.put("/posts/:id", async (ctx, next) => {
+  let id = ctx.params.id;
+  let post = posts.find((post) => post.id === id);
+  post.name = ctx.request.body.name;
+  ctx.body = posts;
+  return await next();
+});
 App.use(router.routes()).use(router.allowedMethods());
 App.listen(PORT);
 console.log(`Server is listening on PORT ${PORT}`);
