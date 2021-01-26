@@ -1,6 +1,7 @@
 const Koa = require("koa");
 const Router = require("@koa/router");
 const bodyParser = require("koa-parser");
+const _ = require("lodash");
 const App = new Koa();
 const PORT = 4000;
 const router = new Router();
@@ -37,22 +38,29 @@ router.get("/api/hello", async (ctx, next) => {
   return await next();
 });
 
+//get all posts
 router.get("/posts", async (ctx, next) => {
   ctx.body = posts;
   return await next();
 });
-
+// add post
 router.post("/posts", async (ctx, next) => {
   let { id, name, content } = ctx.request.body;
   posts.push({ id, name, content });
   ctx.body = posts;
   return await next();
 });
-
+//get post by id
 router.get("/posts/:id", async (ctx, next) => {
-  id = ctx.params.id;
+  let id = ctx.params.id;
   let post = posts.find((post) => post.id === id);
   ctx.body = post;
+  return await next();
+});
+//remove post by id
+router.delete("/posts/:id", async (ctx, next) => {
+  ctx.body = _.remove(posts, (p) => p.id === ctx.params.id);
+  console.log(posts);
   return await next();
 });
 App.use(router.routes()).use(router.allowedMethods());
