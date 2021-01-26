@@ -43,16 +43,16 @@ router.get("/posts", async (ctx, next) => {
 });
 
 router.post("/posts", async (ctx, next) => {
-  // const post = ctx.req.body.;
   let { id, name, content } = ctx.request.body;
-  // if (!id) {
-  //   ctx.throw(400, "id is required field");
-  // }
-  // if (!name) {
-  //   ctx.throw(400, "name is required field");
-  // }
   posts.push({ id, name, content });
   ctx.body = posts;
+  return await next();
+});
+
+router.get("/posts/:id", async (ctx, next) => {
+  id = ctx.params.id;
+  let post = posts.find((post) => post.id === id);
+  ctx.body = post;
   return await next();
 });
 App.use(router.routes()).use(router.allowedMethods());
